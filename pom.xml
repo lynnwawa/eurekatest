@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.nantian.abctest</groupId>
+	<artifactId>abctest-registry</artifactId>
+	<version>1.0.1</version>
+	<packaging>jar</packaging>
+
+	<name>abctest-registry</name>
+	<description>abctest registry programming</description>
+
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.4.7.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<program.finalName>${project.artifactId}-${project.version}</program.finalName>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+      		<groupId>org.springframework.cloud</groupId>
+      		<artifactId>spring-cloud-starter-eureka-server</artifactId>
+    	</dependency>
+    	<dependency>
+	      <groupId>org.springframework.boot</groupId>
+	      <artifactId>spring-boot-starter-security</artifactId>
+    	</dependency>
+    	<!--<dependency>
+			<groupId>com.nantian.abctest</groupId>
+			<artifactId>abctest-core</artifactId>
+			<version>0.0.1</version>
+		</dependency>-->
+	</dependencies>
+
+	<dependencyManagement>
+	    <dependencies>
+	      <dependency>
+	        <groupId>org.springframework.cloud</groupId>
+	        <artifactId>spring-cloud-dependencies</artifactId> 
+	        <version>Camden.SR7</version>
+	        <type>pom</type>
+	        <scope>import</scope>
+	      </dependency>
+	    </dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<copy todir="../deploy/${config.env}">
+									<fileset dir="${project.build.directory}">
+										<include name="${program.finalName}.${project.packaging}"></include>
+									</fileset>
+								</copy>
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/filters/config/${config.env}</directory>
+			</resource>
+		</resources>
+	</build>
+	
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<config.env>dev</config.env>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+				<config.env>test</config.env>
+			</properties>
+		</profile>
+		<profile>
+			<id>pp</id>
+			<properties>
+				<config.env>pp</config.env>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<config.env>prod</config.env>
+			</properties>
+		</profile>
+	</profiles>
+
+</project>

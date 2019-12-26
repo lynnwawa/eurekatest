@@ -1,0 +1,23 @@
+server:
+   port: 8101
+spring:
+  application:
+    name: abctest-registry
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      #defaultZone: http://admin:admin@10.230.199.153:8101/eureka/,http://admin:admin@10.230.199.154:8101/eureka/
+      defaultZone: http://admin:admin@127.0.0.1:8101/eureka/
+security:
+  basic:
+    enabled: true
+  user:
+    name: admin
+    password: admin
+logging: 
+  config: classpath:com/nantian/abctest/core/aop/log/logback-spring.xml
+  file: ./log/${spring.application.name}.log
+  level:
+    root: INFO
